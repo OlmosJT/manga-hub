@@ -1,5 +1,25 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
-  devtools: { enabled: true }
+    devtools: { enabled: true },
+
+    css: [
+        '~/assets/css/main.css',
+    ],
+
+    modules: [
+        '@sidebase/nuxt-auth'
+    ],
+
+    auth: {
+        provider: {
+            type: 'authjs'
+        }
+    },
+
+    runtimeConfig: {
+        googleClientId: process.env.GOOGLE_CLIENT_ID,
+        googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        nuauthSecret: process.env.NUAUTH_SECRET,
+
+        public: {}
+    }
 })
