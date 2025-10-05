@@ -12,7 +12,12 @@
         </nav>
       </div>
       <div class="header-right">
-        <CommonSearchInput v-model="store.filters.searchQuery" />
+        <div class="search-wrapper">
+          <CommonSearchInput
+              v-model="store.filters.searchQuery"
+              @search="handleSearch"
+          />
+        </div>
 
         <template v-if="isAuthenticated">
           <div class="user-actions">
@@ -46,11 +51,11 @@ const toggleProfileDropdown = () => {
   isProfileDropdownVisible.value = !isProfileDropdownVisible.value;
 };
 
-watch(() => store.filters.searchQuery, (newValue) => {
-  if (newValue && route.path !== '/browse') {
+const handleSearch = () => {
+  if (store.filters.searchQuery && route.path !== '/browse') {
     router.push('/browse');
   }
-});
+};
 
 watch(() => route.path, () => {
   isProfileDropdownVisible.value = false;
@@ -69,7 +74,17 @@ watch(() => route.path, () => {
 .navigation a { text-decoration: none; color: #aaa; font-weight: 600; padding-bottom: 5px; border-bottom: 2px solid transparent; transition: all 0.3s; }
 .navigation a:hover { color: var(--text-color); }
 .navigation .router-link-exact-active { color: var(--accent-color); border-bottom-color: var(--accent-color); }
-.user-actions { display: flex; align-items: center; gap: 1.5rem; }
+
+.search-wrapper {
+  flex-grow: 1; /* Allows the search bar to take up available space */
+  min-width: 0; /* Prevents the search input from overflowing its container */
+}
+
+.user-actions, .btn-login {
+  flex-shrink: 0; /* Prevents the user icon/button from being squished */
+  margin-left: 2.5rem;
+}
+
 .profile { position: relative; cursor: pointer; }
 .profile img { width: 40px; height: 40px; border-radius: 50%; display: block; border: 2px solid var(--border-color); }
 .btn-login { padding: 8px 20px; border: 1px solid var(--border-color); border-radius: 8px; text-decoration: none; color: var(--text-color); font-weight: 600; transition: all 0.2s ease; }
