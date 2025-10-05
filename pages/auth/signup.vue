@@ -38,7 +38,7 @@
     </SecondaryButton>
 
     <p class="redirect-link">
-      Already have an account? <NuxtLink to="/signin">Sign In</NuxtLink>
+      Already have an account? <NuxtLink to="/auth/signin">Sign In</NuxtLink>
     </p>
   </AuthCard>
 </template>

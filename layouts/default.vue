@@ -1,26 +1,20 @@
 <template>
   <div class="default-layout">
-    <header class="app-header">
-      HEADER
-    </header>
+    <LayoutAppHeader />
+
     <main class="main-container">
       <div class="content-area">
-        <slot /> </div>
-      <aside class="sidebar left-sidebar">
-        ASIDE CHATTING
-      </aside>
-      <aside class="sidebar right-sidebar">
-        FORM REQUEST MANGA
-      </aside>
+        <slot />
+      </div>
+      <aside class="sidebar left-sidebar"></aside>
+      <aside class="sidebar right-sidebar"></aside>
     </main>
-    <footer class="app-footer">
-      FOOTER
-    </footer>
+
+    <LayoutAppFooter />
   </div>
 </template>
 
-<script setup>
-</script>
+<script setup></script>
 
 <style scoped>
 .default-layout {
@@ -28,20 +22,6 @@
   flex-direction: column;
   min-height: 100vh;
 }
-
-.app-header, .app-footer {
-  flex-shrink: 0;
-  background-color: var(--primary-color);
-  padding: 1rem;
-  text-align: center;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.app-footer {
-  border-top: 1px solid var(--border-color);
-  border-bottom: none;
-}
-
 .main-container {
   flex-grow: 1;
   display: grid;
@@ -53,47 +33,40 @@
   padding: 2rem;
   box-sizing: border-box;
 }
-
 .sidebar {
   background-color: var(--surface-color);
   border-radius: 8px;
   padding: 1.5rem;
 }
-
-/* Re-order content for the grid layout */
 .content-area {
   grid-column: 2 / 3;
+  min-width: 0; /* This prevents wide children from stretching the layout */
 }
 .left-sidebar {
   grid-column: 1 / 2;
-  grid-row: 1; /* Ensures it stays in the first row */
+  grid-row: 1;
 }
 .right-sidebar {
   grid-column: 3 / 4;
-  grid-row: 1; /* Ensures it stays in the first row */
+  grid-row: 1;
 }
 
-
-/* --- MOBILE STYLES --- */
 @media (max-width: 1200px) {
   .main-container {
-    /* Switch to a single column layout */
     grid-template-columns: 1fr;
     padding: 1rem;
     gap: 1.5rem;
   }
-
-  /* Assign rows to stack them correctly */
   .content-area {
-    grid-column: 1 / -1; /* Take full width */
+    grid-column: 1 / -1;
     grid-row: 1;
   }
   .left-sidebar {
-    grid-column: 1 / -1; /* Take full width */
+    grid-column: 1 / -1;
     grid-row: 2;
   }
   .right-sidebar {
-    grid-column: 1 / -1; /* Take full width */
+    grid-column: 1 / -1;
     grid-row: 3;
   }
 }

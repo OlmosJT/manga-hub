@@ -67,7 +67,7 @@
     </SecondaryButton>
 
     <p class="redirect-link">
-      Don't have an account? <NuxtLink to="/signup">Sign Up</NuxtLink>
+      Don't have an account? <NuxtLink to="/auth/signup">Sign Up</NuxtLink>
     </p>
   </AuthCard>
 </template>
