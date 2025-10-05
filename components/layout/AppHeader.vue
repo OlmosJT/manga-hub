@@ -20,7 +20,7 @@
         </div>
 
         <template v-if="isAuthenticated">
-          <div class="user-actions">
+          <div class="user-actions" ref="profileRef">
             <div class="profile" @click="toggleProfileDropdown">
               <img :src="data?.user?.image || 'https://i.pravatar.cc/40'" alt="Profile" />
               <Transition name="dropdown-fade">
@@ -38,12 +38,15 @@
 
 <script setup>
 import { useMangaStore } from '~/stores/manga.js';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+
 const store = useMangaStore();
 const { status, data } = useAuth();
 const router = useRouter();
 const route = useRoute();
 
 const isProfileDropdownVisible = ref(false);
+const profileRef = ref(null);
 
 const isAuthenticated = computed(() => status.value === 'authenticated');
 
@@ -51,12 +54,33 @@ const toggleProfileDropdown = () => {
   isProfileDropdownVisible.value = !isProfileDropdownVisible.value;
 };
 
+// --- Click Outside Logic ---
+const handleClickOutside = (event) => {
+  // If the dropdown is visible and the click is outside the profile area...
+  if (profileRef.value && !profileRef.value.contains(event.target)) {
+    // ...close the dropdown.
+    isProfileDropdownVisible.value = false;
+  }
+};
+
+onMounted(() => {
+  // Add listener when component mounts
+  window.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+  // Clean up listener when component unmounts
+  window.removeEventListener('click', handleClickOutside);
+});
+// -------------------------
+
 const handleSearch = () => {
   if (store.filters.searchQuery && route.path !== '/browse') {
     router.push('/browse');
   }
 };
 
+// Watch for route changes to also close the dropdown
 watch(() => route.path, () => {
   isProfileDropdownVisible.value = false;
 });
@@ -84,7 +108,6 @@ watch(() => route.path, () => {
   flex-shrink: 0; /* Prevents the user icon/button from being squished */
   margin-left: 2.5rem;
 }
-
 .profile { position: relative; cursor: pointer; }
 .profile img { width: 40px; height: 40px; border-radius: 50%; display: block; border: 2px solid var(--border-color); }
 .btn-login { padding: 8px 20px; border: 1px solid var(--border-color); border-radius: 8px; text-decoration: none; color: var(--text-color); font-weight: 600; transition: all 0.2s ease; }
